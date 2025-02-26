@@ -178,42 +178,30 @@ def save_conversation(conversation_log, summary, awkward_expressions="", correct
     # 페이지 생성 또는 가져오기
     page_id = get_or_create_daily_entry(date_str, summary)
     if not page_id:
-        print("페이지 생성 실패")
+        print("❌ 페이지 생성 실패")
         return False
     
     # 페이지 속성 업데이트
     if not update_page_properties(page_id, topics, confidence_level):
-        print("속성 업데이트 실패")
+        print("❌ 속성 업데이트 실패")
         return False
     
     # 페이지 내부 내용 추가
     if not add_content_to_page(page_id, conversation_log, awkward_expressions, corrections, timestamp):
-        print("내용 추가 실패")
+        print("❌ 내용 추가 실패")
         return False
     
+    print(f"✅ 대화 저장 성공!: {summary}")
     return True
 
-def test_save_conversation():
-    """대화 저장 기능 테스트"""
-    # result = save_conversation(
-    #     conversation_log="User: How are you today?\nAI: I'm doing well, thank you for asking! How about you?",
-    #     summary="Quick greeting exchange",
-    #     awkward_expressions="'How are you today' - sounds stiff\n'I'm fine' - too formal",
-    #     corrections="Try 'How’s it going?' instead\nUse 'I’m good, thanks!' for a natural response",
-    #     topics=["Greetings", "Daily Life"],
-    #     confidence_level="High"
-    # )
-    
-    result = save_conversation(
-    conversation_log="User: Hi, how you doing this morning?\nAI: Hey! I’m good, thanks. How about you?\nUser: I good too. Didn’t sleep much though.\nAI: Oh, rough night? What kept you up?",
-    summary="Morning greeting with a friend",
-    awkward_expressions="'How you doing' - Missing 'are', sounds incomplete\n'I good too' - Grammar error, missing 'am'",
-    corrections="Say 'How are you doing?' for natural flow\nUse 'I’m good too' instead of 'I good too'",
-    topics=["Greetings", "Daily Life"],
-    confidence_level="Medium"
-)
-    
-    print("✅ 대화 저장 성공!" if result else "❌ 대화 저장 실패!")
-
 if __name__ == "__main__":
-    test_save_conversation()
+    """대화 저장 기능 테스트"""
+    result = save_conversation(
+        conversation_log="User: Hi, how you doing this morning?\nAI: Hey! I’m good, thanks. How about you?\nUser: I good too. Didn’t sleep much though.\nAI: Oh, rough night? What kept you up?",
+        summary="Morning greeting with a friend",
+        awkward_expressions="'How you doing' - Missing 'are', sounds incomplete\n'I good too' - Grammar error, missing 'am'",
+        corrections="Say 'How are you doing?' for natural flow\nUse 'I’m good too' instead of 'I good too'",
+        topics=["Greetings", "Daily Life"],
+        confidence_level="Medium"
+    )
+    print("✅ 대화 저장 성공!" if result else "❌ 대화 저장 실패!")
